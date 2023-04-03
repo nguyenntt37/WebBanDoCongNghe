@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>QUẢN LÍ</title>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+	<style>
+		
+		.a_admin{
+			position: relative;
+		}
+		.a_admin::after{
+			content: "";
+			position: absolute;
+			background-color: #ff3c78;
+			width: 0;
+			height: 2.5px;
+			left: 15px;
+			bottom: 8px;
+			transition: 0.3s ease;
+		}
+		 .a_admin:hover::after{
+			width: 80%;
+		} 
+	</style>
+</head>
+<body class="container" ng-app="admin-app" style='font-family: Arial, Helvetica, sans-serif;font-size: 19px;'>
+	<header class="row">
+		<h2 class="alert alert-success">Website Administration</h2>
+	</header>
+	<div class="row">
+		<nav class="navbar navbar-inverse"">
+			<div class="container-fluid">
+				<ul class="nav navbar-nav nav_admin">
+					<li> <a class='a_admin' href="/"> Home </a></li>
+					<li> <a class='a_admin' href="#!product">Products</a> </li>
+					<li> <a class='a_admin' href="#!authorize">Authorizing</a> </li>
+					<li> <a class='a_admin' href="/security/logoff">Sign Out</a> </li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+<main>
+	<p class="ng-view"/>
+</main>
+<footer>
+	<div class="panel panel-default">
+		<div class="panel-body text-center">
+			<h3>FPT POLYTECHNIC</h3>
+		</div>
+	</div>
+</footer>
+<script  src="/assets/admin/admin-app.js"></script>
+<script  src="/assets/admin/product/product-ctrl.js"></script>
+<script  src="/assets/admin/authority/authority-ctrl.js"></script>
+</body>
+</html>

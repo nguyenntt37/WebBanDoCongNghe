@@ -1,0 +1,167 @@
+<div xmlns:th="https://www.thymeleaf.org">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav nav_menu">
+                <li><a class='a_menu' th:href="@{/}"><span class='span-menu'>
+					Trang Chủ
+				</span></a></li>
+                <th:block th:if="${#request.remoteUser}">
+                    <li><a class='a_menu1' th:href="@{/security/logoff}">Đăng
+                        Xuất</a></li>
+                    <li><a class='a_menu1' th:href="@{/order/list}">Danh
+                        Sách Đơn Hàng</a></li>
+                    <li
+                            th:if="${#request.isUserInRole('DIRE') or #request.isUserInRole('STAF')}">
+                        <a class='a_menu1' th:href="@{/admin/home/index}">Administation</a>
+                    </li>
+                </th:block>
+                <th:block th:unless="${#request.remoteUser}">
+                    <li><a class='a_menu' th:href="@{/security/login/form}"><span>Đăng
+								Nhập</span></a></li>
+                </th:block>
+<!--                <div class="dropdown dropdown_menus" style="margin-left: 2px">-->
+<!--                    <a class="dropdown-toggle a_dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown"-->
+<!--                       aria-haspopup="true" aria-expanded="true">-->
+<!--                        Dropdown-->
+<!--                    </a>-->
+<!--                    <ul class="dropdown-menu menu_dropdown" aria-labelledby="dropdownMenu1">-->
+<!--                        <li><a class='a_dropdowns' href="#">Đổi mật khẩu</a></li>-->
+<!--                        <li><a class='a_dropdowns' href="#">Đăng kí</a></li>-->
+<!--                        <li><a class='a_dropdowns' href="#">Quên mật khẩu</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+            </ul>
+            <ul th:if="${#request.remoteUser}"
+                class="nav navbar-nav navbar-right">
+                <li><a class='a_menu' href="#">Xin chào:
+                    [[${#request.remoteUser}]]</a></li>
+            </ul>
+            <style>
+                .dropdown_menus {
+                    position: relative;
+                    top: 13px;
+                    width: 200px;
+                }
+
+                .dropdown {
+                    position: relative;
+                    width: 200px;
+                }
+
+                .menu_dropdown {
+                    background-color: black;
+                }
+
+                .menu_dropdown::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 2rem;
+                    background: #fff;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    border-bottom: 10px solid red;
+                    transform: translateY(-100%);
+                }
+
+                .menu_dropdown .a_dropdowns {
+                    padding-top: 1rem;
+                    font-size: 18px;
+                    font-weight: 500;
+                    font-family: Arial, Helvetica, sans-serif;
+                    color: #fff;
+                }
+
+                /*  */
+                .nav_menu {
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .a_menu {
+                    position: relative;
+                    display: flex;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 19px;
+                    letter-spacing: 0.5px;
+                    z-index: 0;
+                }
+
+                .a_menu::after {
+                    content: "";
+                    position: absolute;
+                    background-color: #ff3c78;
+                    width: 0;
+                    height: 2px;
+                    left: 15px;
+                    bottom: 9px;
+                    transition: 0.3s ease;
+                }
+
+                .a_menu:hover::after {
+                    width: 80%;
+                }
+
+                .a_menu1 {
+                    position: relative;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 19px;
+                    letter-spacing: 0.5px;
+                }
+
+                .a_menu1::after {
+                    content: "";
+                    position: absolute;
+                    background-color: #ff3c78;
+                    height: 2px;
+                    width: 0%;
+                    left: 15px;
+                    bottom: 9px;
+                    transition: 0.3s ease;
+                }
+
+                .a_menu1:hover::after {
+                    width: 85%;
+                }
+
+                /* dropdown-menu */
+                .dropdown_menu {
+                    position: relative;
+                    color: white;
+                    top: 10px;
+                    transform: translateZ(-50%);
+                }
+
+                .a_dropdown {
+                    position: relative;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 19px;
+                    letter-spacing: 0.5px;
+                    text-decoration: none;
+                    color: #999999;
+                }
+
+                .a_dropdown:hover {
+                    text-decoration: none;
+                    color: #fff;
+                }
+
+                .a_dropdown::before {
+                    content: "";
+                    position: absolute;
+                    background-color: #ff3c78;
+                    width: 0;
+                    height: 3px;
+                    left: 0;
+                    top: 24px;
+                    transition: 0.3s ease;
+                }
+
+                .a_dropdown:hover::before {
+                    width: 100%;
+                }
+            </style>
+        </div>
+    </nav>
+
+</div>

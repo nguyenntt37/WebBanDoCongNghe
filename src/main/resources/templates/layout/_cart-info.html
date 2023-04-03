@@ -1,0 +1,32 @@
+<div xmlns="https://www.thymeleaf.org">
+<div class="panel panel-primary">
+<div class="panel-body text center">
+<i class="glyphicon glyphicon-shopping-cart" style="font-size: 25px;"></i>
+<a class='agiohang' th:href="@{/cart/view}">Giỏ Hàng {{cart.count}}</a>
+</div>
+<style>
+    .agiohang{
+    	position:relative;
+        font-size: 18px;
+        text-decoration: none;
+    }
+        .agiohang:hover{
+        text-decoration: none;
+    }
+    .agiohang::before{
+     	position: absolute;
+        content: "";
+        width: 0;
+        height: 2.5px;
+        left: 0;
+        background-color: brown;
+        top: 21px;
+        transition: 0.5s ease;
+    }
+    .agiohang:hover::before{
+    	width: 100%
+    }
+
+</style>
+</div>
+</div>

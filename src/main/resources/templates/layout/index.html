@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:fragment="dynamic(main)">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Document</title>
+    <style type="text/css">
+        .container-fluid {
+            width: 80%;
+        }
+
+        body {
+            position: relative;
+            margin-left: 2rem;
+            margin-right: 2rem;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+    </style>
+</head>
+<body ng-app="shopping-cart-app" ng-controller="shopping-cart-ctrl">
+<header class="row"></header>
+<nav class="row">
+    <div th:replace="/layout/_menu.html"></div>
+</nav>
+
+<div class="row">
+    <article class="col-sm-9">
+        <div th:replace="${main}"></div>
+    </article>
+    <aside class="col-sm-3">
+        <div th:replace="/layout/_cart-info.html"></div>
+        <div th:replace="/layout/_category.html"></div>
+    </aside>
+</div>
+</body>
+<script type="text/javascript">
+    const app = angular.module("shopping-cart-app", []);
+    /* Xử lý giỏ hàng */
+    app.controller("shopping-cart-ctrl", function ($scope, $http) {
+        $scope.cart = {
+            items: [],
+            /* Thêm vào giỏ hàng */
+            add(id) {
+                /* Kiểm tra giỏ hàng có mã số không */
+                /* Nếu có thì tăng số lượng -> Lưu */
+                var item = this.items.find(item => item.id == id);
+                if (item) {
+                    item.qty++;
+                    this.saveToLocalStorage();
+
+                } else {	/* Ngược lại nếu không thì  -> Lưu */
+                    $http.get(`/rest/products/${id}`).then(resp => {
+                        resp.data.qty = 1;
+                        this.items.push(resp.data);
+                        this.saveToLocalStorage();
+
+                    })
+                }
+                alert("Đã thêm sản phẩm " + id + " vào giỏ hàng")
+            },
+            /* Xóa sản phẩm trong giỏ hàng */
+            remove(id) {
+                var index = this.items.findIndex(item => item.id == id);
+                this.items.splice(index, 1);
+                this.saveToLocalStorage();
+            },
+            /* Xóa tất cả sản phẩm trong giỏ hàng */
+            clear() {
+                this.items = []
+                this.saveToLocalStorage();
+            },
+            /*Tính tổng số lượng các mặt hàng trong giỏ */
+            get count() {
+                return this.items
+                    .map(item => item.qty)
+                    .reduce((total, qty) => total += qty, 0);
+            },
+            /*Tính tổng thành tiền có trong giỏ */
+            get amount() {
+                return this.items
+                    .map(item => item.qty * item.price)
+                    .reduce((total, qty) => total += qty, 0);
+            },
+            /* Lưu giỏ hàng vào LocalStorage */
+            saveToLocalStorage() {
+                var json = JSON.stringify(angular.copy(this.items));
+                localStorage.setItem("cart", json);
+            },
+            /* Tải mặt hàng lưu bộ nhớ khi thêm vào giỏ hàng */
+            loadFromLocalStorage() {
+                var json = localStorage.getItem("cart");
+                this.items = json ? JSON.parse(json) : [];
+            }
+
+        }
+        $scope.cart.loadFromLocalStorage();
+
+        /* Đặt hàng */
+        $scope.order = {
+            createDate: new Date(),
+            address: "",
+            account: {username: $("#username").text()},
+            get orderDetails() { /* Đọc toàn bộ mặt hàng trong giỏ hàng */
+                return $scope.cart.items.map(item => {
+                    return {
+                        product: {id: item.id}, /* Duyệt qua các mặt hàng trong giỏ hàng - Các mặt hàng trong giỏ thành order detail */
+                        price: item.price,
+                        quantity: item.qty
+                    }
+                });
+            },
+            purchase() {
+                var order = angular.copy(this); /* Lấy thông tin của giỏ hàng */
+                /* Thực hiện đặt sản phẩm */
+                $http.post("/rest/orders", order).then(resp => { /* Địa chỉ để đặt hàng */
+                    alert("Đặt hàng thành công");
+                    $scope.cart.clear();	/* Đặt hàng xong xóa các sản phẩm trong giỏ - chỉ tồn tại trong đơn đặt hàng */
+                    location.href = "/order/detail/" + resp.data.id;
+                }).catch(error => {
+                    alert("Đặt hàng không thành công ! Vui lòng thử lại")
+                    console.log(error)
+                })
+            }
+        }
+    })
+
+
+</script>
+</html>
